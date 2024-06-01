@@ -4,9 +4,10 @@ public class Launcher {
     /*
         Things to add:
         - scoreboard
-        - player names
+        - select symbol
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MainFrame().show());
+//        SwingUtilities.invokeLater(() -> new GameWindow().show());
+        SwingUtilities.invokeLater(() -> new PlayerRegistrationWindow().show());
     }
 }

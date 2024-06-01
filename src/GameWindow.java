@@ -1,21 +1,29 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class MainFrame {
+public class GameWindow {
     private JFrame frame;
     private JLabel headerLabel;
     private JPanel bodyPanel;
     private final JButton[][] grid = new JButton[3][3];
     private JButton restartButton;
-    private final String playerX = "X";
-    private final String playerO = "O";
-    private String currentPlayer = playerX;
+    private String player1Name;
+    private String player2Name;
+    private String currentPlayerName;
+    private final String PLAYER_1_SYMBOL = "X";
+    private final String PLAYER_2_SYMBOL = "O";
+    private String currentPlayerSymbol = PLAYER_1_SYMBOL;
     private boolean gameOver = false;
-    Color navyBlue = new Color(1,21,62);
-    Color orange = new Color(255,102,0);
-    Color babyBlue = new Color(173, 216, 230);
+    static Color navyBlue = new Color(1,21,62);
+    static Color orange = new Color(255,102,0);
+    static Color babyBlue = new Color(173, 216, 230);
+    static Color gray = new Color(128, 128, 128);
 
-    public MainFrame() {
+    public GameWindow(String player1Name, String player2Name) {
+        this.player1Name = player1Name;
+        this.player2Name = player2Name;
+        this.currentPlayerName = player1Name;
+
         frame = new JFrame("Tic Tac Toe");
         frame.setIconImage(new ImageIcon("logo.png").getImage());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -24,9 +32,9 @@ public class MainFrame {
         frame.setResizable(false);
 
         headerLabel = new JLabel();
-        headerLabel.setText(currentPlayer + "'s Turn");
+        headerLabel.setText(currentPlayerName + "'s turn");
         headerLabel.setForeground(babyBlue);
-        headerLabel.setBackground(new Color(105, 105, 105));
+        headerLabel.setBackground(gray);
         headerLabel.setOpaque(true);
         headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
         headerLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -36,7 +44,7 @@ public class MainFrame {
 
         bodyPanel = new JPanel();
         bodyPanel.setLayout(new GridLayout(3,3,3,3));
-        bodyPanel.setBackground(new Color(105, 105, 105));
+        bodyPanel.setBackground(gray);
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 JButton box = new JButton();
@@ -52,10 +60,11 @@ public class MainFrame {
                     if (gameOver) return;
                     JButton button = (JButton) e.getSource();
                     if (button.getText().isEmpty()){
-//                        button.setForeground(currentPlayer.equals(playerX) ? Color.red : Color.blue);
-                        button.setText(currentPlayer);
-                        currentPlayer = currentPlayer.equals(playerX) ? playerO : playerX;
-                        headerLabel.setText(currentPlayer + "'s turn");
+//                        button.setForeground(currentPlayerSymbol.equals(PLAYER_1_SYMBOL) ? Color.red : Color.blue);
+                        button.setText(currentPlayerSymbol);
+                        currentPlayerSymbol = currentPlayerSymbol.equals(PLAYER_1_SYMBOL) ? PLAYER_2_SYMBOL : PLAYER_1_SYMBOL;
+                        currentPlayerName = currentPlayerSymbol.equals(PLAYER_1_SYMBOL) ? player1Name : player2Name;
+                        headerLabel.setText(currentPlayerName + "'s turn");
                     }
                     if (checkWinner() == null && isDraw()) {
                         headerLabel.setText("Tie");
@@ -83,8 +92,8 @@ public class MainFrame {
                 }
             }
             gameOver = false;
-            headerLabel.setBackground(new Color(105, 105, 105));
-            headerLabel.setText(currentPlayer + "'s Turn");
+            headerLabel.setBackground(gray);
+            headerLabel.setText(currentPlayerName + "'s turn");
             headerLabel.setForeground(babyBlue);
         });
 
@@ -104,14 +113,14 @@ public class MainFrame {
             for (int i = 0; i < 3; i++) {
                 visualizeWinner(grid[i][i]);
             }
-            return grid[0][0].getText();
+            return grid[0][0].getText().equals("X") ? player1Name : player2Name;
         }
         else if(!grid[0][2].getText().isEmpty() && grid[0][2].getText().equals(grid[1][1].getText())
                 && grid[0][2].getText().equals(grid[2][0].getText())){
             for (int i = 0; i < 3; i++) {
                 visualizeWinner(grid[i][2-i]);
             }
-            return grid[0][2].getText();
+            return grid[0][2].getText().equals("X") ? player1Name : player2Name;
         }
 
         // checking rows
@@ -121,7 +130,7 @@ public class MainFrame {
                 for (int j = 0; j < 3; j++) {
                     visualizeWinner(grid[i][j]);
                 }
-                return grid[i][0].getText();
+                return grid[i][0].getText().equals("X") ? player1Name : player2Name;
             }
         }
 
@@ -132,7 +141,7 @@ public class MainFrame {
                 for (int j = 0; j < 3; j++) {
                     visualizeWinner(grid[j][i]);
                 }
-                return grid[0][i].getText();
+                return grid[0][i].getText().equals("X") ? player1Name : player2Name;
             }
         }
         return null;
