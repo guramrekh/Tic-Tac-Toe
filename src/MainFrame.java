@@ -65,6 +65,8 @@ public class MainFrame {
 
         frame.add(bodyPanel, BorderLayout.CENTER);
 
+    }
+    public void show() {
         frame.setVisible(true);
     }
 
