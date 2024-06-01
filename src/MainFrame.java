@@ -11,18 +11,21 @@ public class MainFrame {
     private final String playerO = "O";
     private String currentPlayer = playerX;
     private boolean gameOver = false;
+    Color navyBlue = new Color(1,21,62);
+    Color orange = new Color(255,102,0);
+    Color babyBlue = new Color(173, 216, 230);
 
     public MainFrame() {
         frame = new JFrame("Tic Tac Toe");
         frame.setIconImage(new ImageIcon("logo.png").getImage());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400,500);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
-        frame.setSize(400,470);
 
         headerLabel = new JLabel();
         headerLabel.setText(currentPlayer + "'s Turn");
-        headerLabel.setForeground(new Color(173, 216, 230));
+        headerLabel.setForeground(babyBlue);
         headerLabel.setBackground(new Color(105, 105, 105));
         headerLabel.setOpaque(true);
         headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -40,8 +43,8 @@ public class MainFrame {
                 grid[i][j] = box;
                 bodyPanel.add(box);
 
-                box.setBackground(new Color(173, 216, 230));
-                box.setForeground(new Color(1,21,62));
+                box.setBackground(babyBlue);
+                box.setForeground(navyBlue);
                 box.setFont(new Font("Comic Sans MS", Font.PLAIN, 72));
                 box.setFocusable(false);
 
@@ -58,14 +61,35 @@ public class MainFrame {
                         headerLabel.setText("Tie");
                         gameOver = true;
                     } else if (checkWinner() != null ) {
+                        headerLabel.setForeground(navyBlue);
                         headerLabel.setText(checkWinner() + " won!");
                         gameOver = true;
                     }
                 });
             }
         }
+        restartButton = new JButton();
+        restartButton.setText("Restart");
+        restartButton.setPreferredSize(new Dimension(0, 30));
+        restartButton.setFocusable(false);
+        restartButton.setBackground(orange);
+        restartButton.setForeground(navyBlue);
+        restartButton.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
+        restartButton.addActionListener(e -> {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    grid[i][j].setText("");
+                    grid[i][j].setForeground(navyBlue);
+                }
+            }
+            gameOver = false;
+            headerLabel.setBackground(new Color(105, 105, 105));
+            headerLabel.setText(currentPlayer + "'s Turn");
+            headerLabel.setForeground(babyBlue);
+        });
 
 
+        frame.add(restartButton, BorderLayout.SOUTH);
         frame.add(bodyPanel, BorderLayout.CENTER);
 
     }
@@ -125,7 +149,7 @@ public class MainFrame {
     }
 
     private void visualizeWinner(JButton button) {
-        button.setForeground(new Color(255,102,0));
-        headerLabel.setBackground(new Color(255,102,0));
+        button.setForeground(orange);
+        headerLabel.setBackground(orange);
     }
 }
