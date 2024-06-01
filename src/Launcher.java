@@ -7,7 +7,6 @@ public class Launcher {
         - select symbol
      */
     public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> new GameWindow().show());
         SwingUtilities.invokeLater(() -> new PlayerRegistrationWindow().show());
     }
 }

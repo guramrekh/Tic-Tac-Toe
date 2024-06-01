@@ -25,7 +25,7 @@ public class GameWindow {
         this.currentPlayerName = player1Name;
 
         frame = new JFrame("Tic Tac Toe");
-        frame.setIconImage(new ImageIcon("logo.png").getImage());
+        frame.setIconImage(new ImageIcon("logo2.png").getImage());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400,500);
         frame.setLocationRelativeTo(null);
@@ -60,16 +60,18 @@ public class GameWindow {
                     if (gameOver) return;
                     JButton button = (JButton) e.getSource();
                     if (button.getText().isEmpty()){
-//                        button.setForeground(currentPlayerSymbol.equals(PLAYER_1_SYMBOL) ? Color.red : Color.blue);
                         button.setText(currentPlayerSymbol);
                         currentPlayerSymbol = currentPlayerSymbol.equals(PLAYER_1_SYMBOL) ? PLAYER_2_SYMBOL : PLAYER_1_SYMBOL;
                         currentPlayerName = currentPlayerSymbol.equals(PLAYER_1_SYMBOL) ? player1Name : player2Name;
                         headerLabel.setText(currentPlayerName + "'s turn");
                     }
-                    if (checkWinner() == null && isDraw()) {
+                    if (isDraw()) {
+                        headerLabel.setBackground(orange);
+                        headerLabel.setForeground(navyBlue);
                         headerLabel.setText("Tie");
                         gameOver = true;
-                    } else if (checkWinner() != null ) {
+                    } else if (checkWinner() != null) {
+                        headerLabel.setBackground(orange);
                         headerLabel.setForeground(navyBlue);
                         headerLabel.setText(checkWinner() + " won!");
                         gameOver = true;
@@ -148,6 +150,9 @@ public class GameWindow {
     }
 
     private boolean isDraw() {
+        if(checkWinner() != null)
+            return false;
+
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (grid[i][j].getText().isEmpty())
@@ -159,6 +164,6 @@ public class GameWindow {
 
     private void visualizeWinner(JButton button) {
         button.setForeground(orange);
-        headerLabel.setBackground(orange);
+//        headerLabel.setBackground(orange);
     }
 }

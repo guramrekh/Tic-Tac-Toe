@@ -12,7 +12,7 @@ public class PlayerRegistrationWindow {
 
     public PlayerRegistrationWindow() {
         frame = new JFrame("Tic Tac Toe");
-        frame.setIconImage(new ImageIcon("logo.png").getImage());
+        frame.setIconImage(new ImageIcon("logo2.png").getImage());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400,300);
         frame.setLocationRelativeTo(null);
@@ -24,6 +24,9 @@ public class PlayerRegistrationWindow {
         player1Label.setText("Player 1: ");
         player1Label.setFont(new Font("Comic Sans MS", Font.PLAIN, 25));
         player1Label.setForeground(GameWindow.babyBlue);
+        player1Label.setIcon(new ImageIcon("mark-xx.png"));
+        player1Label.setHorizontalTextPosition(JLabel.RIGHT);
+        player1Label.setIconTextGap(10);
         player1TextField = new JTextField(10);
         player1TextField.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 
@@ -31,6 +34,9 @@ public class PlayerRegistrationWindow {
         player2Label.setText("Player 2: ");
         player2Label.setFont(new Font("Comic Sans MS", Font.PLAIN, 25));
         player2Label.setForeground(GameWindow.babyBlue);
+        player2Label.setIcon(new ImageIcon("mark-ooo.png"));
+        player2Label.setHorizontalTextPosition(JLabel.RIGHT);
+        player2Label.setIconTextGap(8);
         player2TextField = new JTextField(10);
         player2TextField.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 
@@ -42,12 +48,6 @@ public class PlayerRegistrationWindow {
         continueButton.setForeground(GameWindow.navyBlue);
         continueButton.addActionListener(e -> {
             GameWindow gameWindow = new GameWindow(player1TextField.getText(), player2TextField.getText());
-//            gameWindow.setPlayer1name(player1TextField.getText());
-//            gameWindow.setPlayer2name(player2TextField.getText());
-
-//            System.out.println(player1TextField.getText());
-//            System.out.println(player2TextField.getText());
-
             frame.setVisible(false);
             gameWindow.show();
         });
