@@ -6,6 +6,11 @@ public class GameWindow {
     private JLabel headerLabel;
     private JPanel bodyPanel;
     private final JButton[][] grid = new JButton[3][3];
+    private JPanel bottomPanel;
+    private JPanel scoreboardPanel;
+    private JLabel scoreLabel;
+    private int player1Score = 0;
+    private int player2Score = 0;
     private JButton restartButton;
     private String player1Name;
     private String player2Name;
@@ -27,7 +32,7 @@ public class GameWindow {
         frame = new JFrame("Tic Tac Toe");
         frame.setIconImage(new ImageIcon("logo2.png").getImage());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400,500);
+        frame.setSize(400,550);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
 
@@ -65,27 +70,47 @@ public class GameWindow {
                         currentPlayerName = currentPlayerSymbol.equals(PLAYER_1_SYMBOL) ? player1Name : player2Name;
                         headerLabel.setText(currentPlayerName + "'s turn");
                     }
-                    if (isDraw()) {
+                    String winner = checkWinner();
+                    if (winner == null && isGridFull()) {
                         headerLabel.setBackground(orange);
                         headerLabel.setForeground(navyBlue);
                         headerLabel.setText("Tie");
                         gameOver = true;
-                    } else if (checkWinner() != null) {
+                    } else if (winner != null) {
                         headerLabel.setBackground(orange);
                         headerLabel.setForeground(navyBlue);
-                        headerLabel.setText(checkWinner() + " won!");
+                        headerLabel.setText(winner + " won!");
+                        if (winner.equals(player1Name)) {
+                            updateScoreLabel(player1Name);
+//                            scoreLabel.setText(player1Name + " " + ++player1Score + ":" + player2Score + " " + player2Name);
+                        } else {
+                            updateScoreLabel(player2Name);
+//                            scoreLabel.setText(player1Name + " " + player1Score + ":" + ++player2Score + " " + player2Name);
+                        }
                         gameOver = true;
                     }
                 });
             }
         }
+        bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.setPreferredSize(new Dimension(0, 80));
+
+        scoreboardPanel = new JPanel();
+        scoreboardPanel.setBackground(gray);
+        scoreLabel = new JLabel();
+        scoreLabel.setText(player1Name + " " + player1Score + ":" + player2Score + " " + player2Name);
+        scoreLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 30));
+        scoreLabel.setForeground(babyBlue);
+        scoreLabel.setVerticalAlignment(SwingConstants.CENTER);
+        scoreboardPanel.add(scoreLabel);
+
         restartButton = new JButton();
         restartButton.setText("Restart");
-        restartButton.setPreferredSize(new Dimension(0, 30));
+        restartButton.setPreferredSize(new Dimension(100, 30));
         restartButton.setFocusable(false);
         restartButton.setBackground(orange);
         restartButton.setForeground(navyBlue);
-        restartButton.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
+        restartButton.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
         restartButton.addActionListener(e -> {
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
@@ -97,12 +122,13 @@ public class GameWindow {
             headerLabel.setBackground(gray);
             headerLabel.setText(currentPlayerName + "'s turn");
             headerLabel.setForeground(babyBlue);
+            updateScoreLabelColors();
         });
+        bottomPanel.add(restartButton, BorderLayout.SOUTH);
+        bottomPanel.add(scoreboardPanel, BorderLayout.CENTER);
 
-
-        frame.add(restartButton, BorderLayout.SOUTH);
         frame.add(bodyPanel, BorderLayout.CENTER);
-
+        frame.add(bottomPanel, BorderLayout.SOUTH);
     }
     public void show() {
         frame.setVisible(true);
@@ -149,10 +175,7 @@ public class GameWindow {
         return null;
     }
 
-    private boolean isDraw() {
-        if(checkWinner() != null)
-            return false;
-
+    private boolean isGridFull() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (grid[i][j].getText().isEmpty())
@@ -164,6 +187,34 @@ public class GameWindow {
 
     private void visualizeWinner(JButton button) {
         button.setForeground(orange);
-//        headerLabel.setBackground(orange);
+    }
+
+    private void updateScoreLabel(String winner) {
+        String colorToHex = String.format("#%02x%02x%02x", navyBlue.getRed(), navyBlue.getGreen(), navyBlue.getBlue());
+        String updatedScoreLabel = "";
+        if (winner.equals(player1Name)){
+            player1Score++;
+            String player1ScoreStr = "<span style='color:" + colorToHex + ";'>" + player1Score + "</span>";
+            String player2ScoreStr = Integer.toString(player2Score);
+            updatedScoreLabel = "<html>" + player1Name + " " + player1ScoreStr + ":" + player2ScoreStr + " " + player2Name + "</html>";
+        }
+        else {
+            player2Score++;
+            String player1ScoreStr = Integer.toString(player1Score);
+            String player2ScoreStr = "<span style='color:" + colorToHex + ";'>" + player2Score + "</span>";
+            updatedScoreLabel = "<html>" + player1Name + " " + player1ScoreStr + ":" + player2ScoreStr + " " + player2Name + "</html>";
+        }
+
+        scoreLabel.setText(updatedScoreLabel);
+    }
+
+    private void updateScoreLabelColors() {
+        String colorToHex = String.format("#%02x%02x%02x", babyBlue.getRed(), babyBlue.getGreen(), babyBlue.getBlue());
+
+        String player1ScoreStr = "<span style='color:" + colorToHex + ";'>" + player1Score + "</span>";
+        String player2ScoreStr = "<span style='color:" + colorToHex + ";'>" + player2Score + "</span>";
+        String updatedScoreLabel = "<html>" + player1Name + " " + player1ScoreStr + ":" + player2ScoreStr + " " + player2Name + "</html>";
+
+        scoreLabel.setText(updatedScoreLabel);
     }
 }
